@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>ToDo-{{ title }}</title>
+    {% else %}
+        <title>ToDo</title>
+    {% endif %}
+    <style type="text/css">
+        table {
+            background: black; /* Цвет фона таблицы */
+            color: black; /* Цвет текста */
+        }
+        td {
+            background: white; /* Цвет фона ячеек */
+            padding: 5px; /* Поля вокруг текста */
+        }
+        th {
+            background: #bde7e8;
+            padding: 5px; /* Поля вокруг текста */
+        }
+  </style>
+
+</head>
+<body>
+    <div style="background-color: #bde7e8; padding: 1pt 10pt 1pt 10pt">
+        <p>Here must be a navigation bar</p>
+    </div>
+    <div style="padding: 1pt 10pt 1pt 10pt">
+        <h2 style="color: #5293b3">My test ToDo app</h2>
+        <hr color="#5293b3" size="2px">
+        <br>
+    </div>
+    <div style="padding: 1pt 10pt 1pt 10pt">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+</html>

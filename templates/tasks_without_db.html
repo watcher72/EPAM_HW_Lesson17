@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--    {% if tasks %}-->
+        <table>
+            <tr style="background: afdff6">
+                <th>ID</th>
+                <th>Task</th>
+                <th>Category</th>
+                <th>Expired_date</th>
+                <th>Done</th>
+                <th>Completed_date</th>
+            </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task['id'] }}</td>
+                <td>{{ task['task'] }}</td>
+                <td>{{ task['category'] }}</td>
+                <td>{{ task['expired_date'] }}</td>
+                <td>{{ task['done'] }}</td>
+                <td>{{ task['completed_date'] }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+<!--    {% endif %}-->
+{% endblock content %}
