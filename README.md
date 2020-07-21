@@ -1,0 +1,1 @@
+Homework to the lesson 17 "Web programming" (course Python $ BigData)
