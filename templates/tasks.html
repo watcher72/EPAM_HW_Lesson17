@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--    {% if tasks %}-->
+        <table>
+            <tr style="background: afdff6">
+                {% for field in fields %}
+                    <th>{{ field }}</th>
+                {% endfor %}
+            </tr>
+        {% for task in tasks %}
+            <tr>
+                {% for key in task %}
+                    <td>{{ task[key] }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </table>
+<!--    {% endif %}-->
+{% endblock content %}

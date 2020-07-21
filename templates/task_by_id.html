@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if task %}
+        <h4>Task {{ task['id'] }}</h4>
+        <p><b>Task: </b>{{ task['task'] }}</p>
+        <p><b>Category: </b>{{ task['category'] }}</p>
+        <p><b>Expired_date: </b>{{ task['expired_date'] }}</p>
+        <p><b>Done: </b>{{ task['done'] }}</p>
+        <p><b>Completed_date: </b>{{ task['completed_date'] }}</p>
+    {% endif %}
+{% endblock content %}
