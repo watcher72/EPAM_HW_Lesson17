@@ -1,31 +1,33 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template
 
 from datetime import datetime
 
+
+TIME_FORMAT = '%d-%m-%Y'
 
 TASKS = [
     {'id': 1,
      'task': 'Prepare a dinner for a week',
      'category': 'home',
-     'expired_date': datetime.today().strftime('%d-%m-%y'),
+     'expired_date': datetime.today().strftime(TIME_FORMAT),
      'done': 'no',
      'completed_date': 'Not completed'},
     {'id': 2,
      'task': 'Make the report of the week',
      'category': 'job',
-     'expired_date': datetime.today().replace(day=datetime.today().day + 2).strftime('%d-%m-%y'),
+     'expired_date': datetime.today().replace(day=datetime.today().day + 2).strftime(TIME_FORMAT),
      'done': 'no',
      'completed_date': 'Not completed'},
     {'id': 3,
      'task': 'Make a homework for lesson 10',
      'category': 'studies',
-     'expired_date': datetime.today().replace(day=datetime.today().day + 1).strftime('%d-%m-%y'),
+     'expired_date': datetime.today().replace(day=datetime.today().day + 1).strftime(TIME_FORMAT),
      'done': 'no',
      'completed_date': 'Not completed'},
     {'id': 4,
      'task': 'Read the documentation about descriptors',
      'category': 'studies',
-     'expired_date': datetime.today().strftime('%d-%m-%y'),
+     'expired_date': datetime.today().strftime(TIME_FORMAT),
      'done': 'no',
      'completed_date': 'Not completed'}
 ]
@@ -45,7 +47,6 @@ def show_tasks():
     if not request.args:
         return render_template('tasks_without_db.html', tasks=TASKS)
     keys = request.args
-    print(keys)
     temp_tasks = TASKS
     tasks = []
     for key in keys:
@@ -57,18 +58,14 @@ def show_tasks():
         temp_tasks = tasks
         tasks = []
     return render_template('tasks_without_db.html', tasks=temp_tasks)
-    # return jsonify(temp_tasks)
 
 
 @app.route('/api/tasks/', methods=['POST'])
 def add_task():
-    print(request)
     new_task = request.json
-    print(new_task)
     new_task['id'] = len(TASKS) + 1
     TASKS.append(new_task)
     return render_template('tasks_without_db.html', tasks=TASKS)
-    # return f'{new_task} added!'
 
 
 @app.route('/api/tasks/<int:task_id>', methods=['GET'])
@@ -80,33 +77,28 @@ def show_task_by_id(task_id):
     if task is None:
         return f'<h4>Not found task with id {task_id}</h4>', 404
     return render_template('task_by_id_without_db.html', task=task)
-    # return task
+
+
+def search_task_by_id(task_id):
+    for i, task in enumerate(TASKS):
+        if task['id'] == task_id:
+            return i
+    return -1
 
 
 @app.route('/api/tasks/<int:task_id>/delete', methods=['DELETE'])
 def delete_task(task_id):
-    index = -1
-    for i, task in enumerate(TASKS):
-        if task['id'] == task_id:
-            index = i
-            break
+    index = search_task_by_id(task_id)
     if index == -1:
         return f'<h4>Not found task with id {task_id}</h4>', 404
-    deleted = TASKS[index]
     del TASKS[index]
     return render_template('tasks_without_db.html', tasks=TASKS)
-    # return f'{deleted} deleted!'
 
 
 @app.route('/api/tasks/<int:task_id>/update', methods=['PUT'])
 def update(task_id):
     new_values = request.form
-    print(new_values)
-    index = -1
-    for i, t in enumerate(TASKS):
-        if t['id'] == task_id:
-            index = i
-            break
+    index = search_task_by_id(task_id)
     if index == -1:
         return f'<h4>Not found task with id {task_id}</h4>'
     for key in new_values:
@@ -114,17 +106,7 @@ def update(task_id):
             return f'Task object has not field {key}'
         TASKS[index][key] = new_values[key]
     return render_template('tasks_without_db.html', tasks=TASKS)
-    # return f'Updated task: {TASKS[index]}'
 
 
-# @app.route('/api/tasks/category=<string:category>', methods=['GET'])
-# def show_tasks_by_exp_date(category):
-#     tasks_by_exp_date = []
-#     for task in TASKS:
-#         if task['category'] == category:
-#             tasks_by_exp_date.append(task)
-#     return render_template('tasks_without_db.html', tasks=tasks_by_exp_date)
-#
-#
 if __name__ == '__main__':
     app.run()
